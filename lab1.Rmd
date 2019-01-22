@@ -93,8 +93,36 @@ class(german[-c(3,6),])
 dim(german[-c(3,6),])
 ```
 
+Seconpqrt Example:
+```{r}
+table(german$Job) / nrow(german)
+```
+
+```{r}
+mean(german$Age)
+sd(german$Age)
+```
 
 
+```{r}
+table(german$Class)
+
+accuracy <- table(german$Class)/nrow(german)
+accuracy
+
+mean(table(german$Class))
+sd(table(german$Class))
+
+
+```
+5) Second part
+```{r}
+ggplot(german,aes(x=german$Property,fill=german$Class)) + geom_bar(position="dodge")
+```
+
+```{r}
+ggplot(german,aes(x=german$Age)) + geom_density()
+```
 
 
 
