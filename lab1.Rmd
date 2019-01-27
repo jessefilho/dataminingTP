@@ -210,7 +210,19 @@ ggplot(german,aes(x=german$Age)) + geom_density()
 ```
 
 
+```{r}
+#7. cor funciton
 
+class(german$Duration)
+class(german$Age)
+class(german$CreditAmount)
+print("Cor between Duration and Age")
+cor(german$Duration,german$Age)
+print("Cor between Duration and CreditAmount")
+cor(german$Duration,german$CreditAmount)
+print("Cor between Age and CreditAmount")
+cor(german$Age,german$CreditAmount)
+```
 
 
 
