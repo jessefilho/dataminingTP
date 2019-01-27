@@ -22,6 +22,7 @@ print(color)
 
 ```{r}
 class(german)
+dim(german)
 class(german$Job)
 sapply(german, class)
 ```
@@ -39,23 +40,25 @@ dim(german[1,])
 ```{r}
 class(german[c(1,3),])
 dim(german[c(1,3),])
-
+german[c(1,3),]
 ```
 
 ```{r}
 class(german$Age)
 dim(german$Age)
-
+german$Age
 ```
 
 ```{r}
 class(german[1])
 dim(german[1])
+
 ```
 
 ```{r}
 class(german["Age"])
 dim(german["Age"])
+german["Age"]
 ```
 
 ```{r}
@@ -71,11 +74,14 @@ dim(german[,c("Age","Job")])
 ```{r}
 class(german[3,c("Age","Job")])
 dim(german[3,c("Age","Job")])
+
+german[3,c("Age","Job")]
 ```
 
 ```{r}
 class(german[which(german$Age>70),])
 dim(german[which(german$Age>70),])
+german[which(german$Age>70),]
 ```
 
 ```{r}
@@ -86,6 +92,7 @@ dim(german[which(german$Job=="A171"),])
 ```{r}
 class(german[-1,])
 dim(german[-1,])
+german[-1,]
 ```
 
 ```{r}
@@ -105,14 +112,92 @@ sd(german$Age)
 
 
 ```{r}
+#tutorial followed https://machinelearningmastery.com/machine-learning-in-r-step-by-step/
+#Frenquency distribution
 table(german$Class)
+table(german$Job)
+#Relative distribution
+table(german$Class)/nrow(german)
+table(german$Job)/nrow(german)
+#Mean of Age
+mean(german$Age)
+#Standard deviation of Age
+sd(german$Age)
 
-accuracy <- table(german$Class)/nrow(german)
-accuracy
 
+#Class Frenquency distribution
+table(german$Class)
+#Class relative distribution
+table(german$Class)/nrow(german)
+#Mean of Class
 mean(table(german$Class))
+#Standard deviation of Class
 sd(table(german$Class))
 
+#Accuracy of a classification model
+
+# create a list of 80% of the rows in the original dataset we can use for training
+validation_index <- createDataPartition(german$Class, p=0.80, list=FALSE)
+# select 20% of the data for validation
+validation <- german[-validation_index,]
+# use the remaining 80% of data to training and testing the models
+dataset <- german[validation_index,]
+
+# dimensions of dataset
+dim(dataset)
+# list types for each attribute
+sapply(dataset, class)
+# take a peek at the first 5 rows of the data
+head(dataset)
+# list the levels for the class
+levels(dataset$Class)
+
+# summarize the class distribution
+percentage <- prop.table(table(dataset$Class)) * 100
+cbind(freq=table(dataset$Class), percentage=percentage)
+
+# summarize the class distribution
+percentage <- prop.table(table(dataset$Species)) * 100
+cbind(freq=table(dataset$Species), percentage=percentage)
+
+# summarize attribute distributions
+# summary(dataset)
+
+# Run algorithms using 10-fold cross validation
+control <- trainControl(method="cv", number=10)
+metric <- "Accuracy"
+
+# a) linear algorithms
+set.seed(7)
+fit.lda <- train(Class~., data=dataset, method="lda", metric=metric, trControl=control)
+# b) nonlinear algorithms
+# CART
+set.seed(7)
+fit.cart <- train(Class~., data=dataset, method="rpart", metric=metric, trControl=control)
+# kNN
+set.seed(7)
+fit.knn <- train(Class~., data=dataset, method="knn", metric=metric, trControl=control)
+# c) advanced algorithms
+# SVM
+set.seed(7)
+fit.svm <- train(Class~., data=dataset, method="svmRadial", metric=metric, trControl=control)
+# Random Forest
+set.seed(7)
+fit.rf <- train(Class~., data=dataset, method="rf", metric=metric, trControl=control)
+
+# summarize accuracy of models
+results <- resamples(list(lda=fit.lda, cart=fit.cart, knn=fit.knn, svm=fit.svm, rf=fit.rf))
+summary(results)
+
+# compare accuracy of models
+dotplot(results)
+
+# summarize Best Model
+print(fit.lda)
+
+# estimate skill of LDA on the validation dataset
+predictions <- predict(fit.lda, validation)
+confusionMatrix(predictions, validation$Class)
 
 ```
 5) Second part
