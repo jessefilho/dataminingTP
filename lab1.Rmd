@@ -224,11 +224,55 @@ print("Cor between Age and CreditAmount")
 cor(german$Age,german$CreditAmount)
 ```
 
+```{r}
+#8. page 4
+print(chisq.test(german$Job,german$PersonalStatus))
+```
+
+```{r}
+#9. 
+#With Age
+oneway.test(german$Age ~ german$Class,german)
+#With Duration
+oneway.test(german$Duration ~ german$Class,german)
+#With PresentResidenceSince
+oneway.test(german$PresentResidenceSince ~ german$Class,german)
+#With CreditAmount
+oneway.test(german$CreditAmount ~ german$Class,german)
+#With InstallmentRate
+oneway.test(german$InstallmentRate ~ german$Class,german)
 
 
+```
 
+```{r}
+# Example
+# index <- sample(1:nrow(german),size = 0.1* nrow(german))
+# test <- german[index,]
+# train <- german[-index,]
 
+# Split between 90 and 10
+index <- sample(1:nrow(german),size = 0.9* nrow(german))
+# Use the large partition to training - 90
+train <- german[index,]
+# Use the small partitio to test - 10
+test <- german[-index,]
+```
 
+```{r}
+t1 = rpart(Class ~., data = train)
+print(t1)
+```
+
+```{r}
+prp(t1, extra=101)
+```
+
+```{r}
+pred <- predict(t1, train, type = "class")
+mConfusion <- table(train$Class, pred)
+TrainErr <- 1 - (mConfusion[1,1]+mConfusion[2,2])/sum(mConfusion)
+```
 
 
 
