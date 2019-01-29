@@ -260,20 +260,135 @@ test <- german[-index,]
 ```
 
 ```{r}
+#Tree traing
 t1 = rpart(Class ~., data = train)
 print(t1)
+
+
+```
+```{r}
+#Tree test
+t1_test = rpart(Class ~., data = test)
+print(t1_test)
 ```
 
 ```{r}
 prp(t1, extra=101)
 ```
+```{r}
+prp(t1_test, extra=101)
+```
 
 ```{r}
+#4.
 pred <- predict(t1, train, type = "class")
 mConfusion <- table(train$Class, pred)
 TrainErr <- 1 - (mConfusion[1,1]+mConfusion[2,2])/sum(mConfusion)
+print(TrainErr)
+#5. Compute errors
+TrainErr5 <- 1 - (mConfusion[1,2]+mConfusion[2,1])/sum(mConfusion)
+print(TrainErr5)
+```
+```{r}
+pred_test <- predict(t1, test, type = "class")
+mConfusion_test <- table(test$Class, pred_test)
+TrainErr_test <- 1 - (mConfusion_test[1,1]+mConfusion_test[2,2])/sum(mConfusion_test)
+print(TrainErr_test)
+#5. Compute errors
+TrainErr5_test <- 1 - (mConfusion_test[1,2]+mConfusion_test[2,1])/sum(mConfusion_test)
+print(TrainErr5_test)
 ```
 
 
+```{r}
+#6. 
+pred <- predict(t1, train, type = "prob")
+dpred <- as.data.frame(pred)
+mpred <- melt(dpred, measure.vars = 1:2)
+ggplot(mpred, aes(x=mpred$value)) + geom_freqpoly(aes(x=value,colours= variable),bins =50)
 
+print(pred)
+print(mpred)
+
+melt(dpred, measure.vars = 1:2)
+```
+
+```{r}
+print(dpred[1])
+
+mpred1 <- melt(dpred, measure.vars = 1:1)
+ggplot(mpred1, aes(x=mpred$value)) + geom_freqpoly(aes(x=value,colours= variable),bins =50)
+```
+
+```{r}
+mpred1 <- melt(dpred, measure.vars = 2:2)
+ggplot(mpred1, aes(x=mpred$value)) + geom_freqpoly(aes(x=value,colours= variable),bins =50)
+```
+
+
+```{r}
+#Pruning a decision tree train
+#1
+
+t2 <- rpart(Class ~., data = train, control = rpart.control(minsplit=10,cp=0))
+print(t2)
+```
+
+```{r}
+prp(t2, extra=101)
+```
+
+```{r}
+predT2 <- predict(t2, train, type = "class")
+
+mConfusionT2 <- table(train$Class, predT2)
+TrainErrT2 <- 1 - (mConfusionT2[1,1]+mConfusionT2[2,2])/sum(mConfusionT2)
+
+print("Tree 2 for error of training")
+print(TrainErrT2)
+```
+
+```{r}
+#Tree t2 training 
+printcp(t2)
+```
+
+```{r}
+plotcp(t2)
+```
+
+
+```{r}
+#Pruning a decision tree train
+#1
+
+t2_test <- rpart(Class ~., data = test, control = rpart.control(minsplit=10,cp=0))
+print(t2_test)
+```
+
+```{r}
+#Tree t2 test 
+printcp(t2_test)
+```
+
+```{r}
+prp(t2_test, extra=101)
+```
+
+
+```{r}
+predT2_test <- predict(t2, test, type = "class")
+
+mConfusionT2_test <- table(test$Class, predT2_test)
+TrainErrT2_test <- 1 - (mConfusionT2_test[1,1]+mConfusionT2_test[2,2])/sum(mConfusionT2_test)
+print("Tree 2 for error of test")
+print(TrainErrT2_test)
+
+```
+
+```{r}
+t2p <- prune(t2, cp = 0.035714)
+print(t2p)
+print(t2)
+```
 
