@@ -1,0 +1,75 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+adult = read.csv(file = 'adult.csv', header = TRUE, na.strings = "?")
+
+dim(adult)
+nrow(adult)
+head(adult)
+tail(adult)
+summary(adult)
+names(adult)
+str(adult)
+```
+
+
+```{r}
+sapply(adult, class)
+```
+
+```{r}
+#Frequention distribution
+table(adult$education)
+
+```
+
+```{r}
+#Relative distribution of education
+table(adult$education)/nrow(adult)
+```
+
+```{r}
+mean(adult$age)
+sd(adult$age)
+```
+
+```{r}
+#Frequention distribution
+table(adult$Class)
+```
+
+```{r}
+#Relative distribution of education
+table(adult$Class)/nrow(adult)
+```
+
+```{r}
+#See if a variable contains missing values
+is.na(adult$occupation)
+```
+
+```{r}
+#Countting the number of missing values
+sum(is.na(adult$occupation))
+```
+```{r}
+#compute the number of missing values of all variables
+countNA <- function(x){return(sum(is.na(x)))}
+countNA(adult)
+```
+```{r}
+#compute the number of missing values of all variables
+sapply(adult,countNA)
+```
+
+```{r}
+
+a = c(which(!is.na(adult$workclass)))
+df = data.frame(which(!is.na(adult$workclass)& !is.na(adult$occupation) & !is.na(adult$native.country) ))
+class(df)
+#adult2 = data[which(!is.na(adult$workclass) & !is.na(adult$occupation) & !is.na(adult$native.country)),]
+```
+
