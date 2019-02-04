@@ -66,10 +66,58 @@ sapply(adult,countNA)
 ```
 
 ```{r}
+adult2 <- adult[which(!is.na(adult$workclass) & !is.na(adult$occupation) & !is.na(adult$native.country)),]
 
-a = c(which(!is.na(adult$workclass)))
-df = data.frame(which(!is.na(adult$workclass)& !is.na(adult$occupation) & !is.na(adult$native.country) ))
-class(df)
-#adult2 = data[which(!is.na(adult$workclass) & !is.na(adult$occupation) & !is.na(adult$native.country)),]
+class(adult2)
+sapply(adult2, class)
+
+
+print("Adult")
+nrow(adult)
+
+print("Adult2")
+nrow(adult2)
+
+print('Diff')
+print(nrow(adult) - nrow(adult2))
+```
+
+```{r}
+
+adult2$continent[adult2$native.country=='Cuba'] <- 'NorthAmerica'
+adult2$continent[adult2$native.country=='Puerto-Rico'] <- 'NorthAmerica'
+adult2$continent[adult2$native.country=='United-States'] <- 'NorthAmerica'
+adult2$continent[adult2$native.country=='Mexico'] <- 'NorthAmerica'
+adult2$continent[adult2$native.country=='Canada'] <- 'NorthAmerica'
+adult2$continent[adult2$native.country=='Honduras'] <- 'NorthAmerica'
+adult2$continent[adult2$native.country=='Jamaica'] <- 'NorthAmerica'
+adult2$continent[adult2$native.country=='Haiti'] <- 'NorthAmerica'
+adult2$continent[adult2$native.country=='Dominican-Republic'] <- 'NorthAmerica'
+
+adult2$continent[adult2$native.country=='Cambodia'] <- 'Asia'
+adult2$continent[adult2$native.country=='India'] <- 'Asia'
+adult2$continent[adult2$native.country=='Iran'] <- 'Asia'
+adult2$continent[adult2$native.country=='Thailand'] <- 'Asia'
+adult2$continent[adult2$native.country=='Laos'] <- 'Asia'
+adult2$continent[adult2$native.country=='Taiwan'] <- 'Asia'
+adult2$continent[adult2$native.country=='Chine'] <- 'Asia'
+adult2$continent[adult2$native.country=='Philippines'] <- 'Asia'
+
+
+
+adult2$continent[adult2$native.country=='England'] <- 'Europe'
+adult2$continent[adult2$native.country=='Germany'] <- 'Europe'
+adult2$continent[adult2$native.country=='Poland'] <- 'Europe'
+adult2$continent[adult2$native.country=='Italy'] <- 'Europe'
+adult2$continent[adult2$native.country=='France'] <- 'Europe'
+adult2$continent[adult2$native.country=='Portugal'] <- 'Europe'
+
+adult2$continent[adult2$native.country=='Ecuador'] <- 'SouthAmerica'
+adult2$continent[adult2$native.country=='Columbia'] <- 'SouthAmerica'
+
+
+
+print(adult2$native.country)
+print(adult2$continent)
 ```
 
