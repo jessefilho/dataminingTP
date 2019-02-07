@@ -117,7 +117,15 @@ adult2$continent[adult2$native.country=='Columbia'] <- 'SouthAmerica'
 
 
 
-print(adult2$native.country)
-print(adult2$continent)
+#print(adult2$native.country)
+#print(adult2$continent)
+
+adult2$continent <- factor(adult2$continent)
+```
+
+
+```{r}
+#Frequention distribution
+table(adult2$continent)
 ```
 
